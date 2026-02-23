@@ -1,7 +1,11 @@
-from parser import parse_log_file
-from anomaly_detector import detect_suspicious_activity
-from ai_interpreter import explain_threat
+import sys
+import os
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from src.parser import parse_log_file
+from src.anomaly_detector import detect_suspicious_activity
+from src.ai_interpreter import explain_threat
 import sys
 
 
@@ -31,6 +35,6 @@ def main(log_file_path):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python run.py E:\Project\AI\Firewall\data\firewall_sample.log")
+        print(r"Usage: python run.py E:\Project\AI\Firewall\data\firewall_sample.log")
     else:
         main(sys.argv[1])

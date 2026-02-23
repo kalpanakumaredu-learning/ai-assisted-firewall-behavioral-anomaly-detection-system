@@ -1,17 +1,24 @@
-## Suspicious Activity — 185.122.58.13 → 192.168.0.20
+# AI-Powered Firewall Threat Analysis Report
 
-**Observed behavior:** Multiple repeated connection attempts observed from external IP **185.122.58.13** targeting internal host **192.168.0.20**. Attempts all target the same destination host and port range, indicative of automated probing.
+## Suspicious Activity
 
-**Likely attack type:** Automated scanning / credential-guessing (brute-force) against services on the destination host.
+You are a senior cybersecurity analyst.
+Analyze the following network event and provide a detailed security explanation (6-8 sentences):
 
-**Possible attacker intent:** Discover open services and weak credentials to gain unauthorized access or to identify attack surface for later exploitation.
+Source IP: 185.122.58.13
+Destination IP: 192.168.0.20
+Protocol: Unknown
+Destination Port: 22
+Repeated Attempts: 7
 
-**Potential impact if not addressed:** Successful compromise of the host (remote code execution, persistence), data exfiltration, or lateral movement to other network assets.
+Your explanation MUST include:
+1. The likely attacker behavior or technique.
+2. A possible motive for the repeated attempts.
+3. The potential security risk if ignored.
+4. How this behavior fits into the attack kill chain.
+5. Recommended defensive actions.
 
-**Recommended actions:**
+Write in clear professional incident-report language.
 
-* Block `185.122.58.13` at the perimeter firewall.
-* Apply rate limiting and fail2ban-style auto-banning.
-* Check authentication logs on `192.168.0.20` for successful logins.
-* Enforce SSH key-only authentication.
-* Add event to SIEM with monitoring alerts.
+---
+
