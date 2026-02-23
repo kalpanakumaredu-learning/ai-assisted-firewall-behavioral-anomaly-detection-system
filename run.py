@@ -1,6 +1,6 @@
 from parser import parse_log_file
 from anomaly_detector import detect_suspicious_activity
-from rag_assistant import explain_threat
+from ai_interpreter import explain_threat
 
 import sys
 
