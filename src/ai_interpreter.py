@@ -1,13 +1,15 @@
-from transformers import pipeline
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from typing import Dict
+import torch
 
-# Load lightweight local model
-llm = pipeline("text-generation", model="google/flan-t5-base")
+# Load tokenizer and model properly for encoder-decoder architecture
+tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
+model = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-base")
+
 
 def explain_threat(event: Dict) -> str:
     """
-    Returns a detailed narrative explanation for a suspicious firewall event.
-    Produces a multi-sentence human-readable cybersecurity assessment.
+    Generate structured cybersecurity analysis for suspicious firewall activity.
     """
 
     src = event.get("SRC", "Unknown")
@@ -16,25 +18,36 @@ def explain_threat(event: Dict) -> str:
     dpt = event.get("DPT", "Unknown")
     count = event.get("count", "Unknown")
 
-    prompt = f"""
-You are a senior cybersecurity analyst.
-Analyze the following network event and provide a detailed security explanation (6-8 sentences):
+    prompt = (
+        "Act as a senior cybersecurity analyst writing a formal incident report.\n\n"
+        f"Source IP: {src}\n"
+        f"Destination IP: {dst}\n"
+        f"Protocol: {proto}\n"
+        f"Destination Port: {dpt}\n"
+        f"Repeated Attempts: {count}\n\n"
+        "Write a detailed 6-8 sentence analysis describing:\n"
+        "- The attacker behavior\n"
+        "- Likely objective\n"
+        "- Risk severity\n"
+        "- Attack lifecycle phase\n"
+        "- Defensive mitigation steps\n\n"
+        "Use formal SOC reporting language."
+    )
+    
 
-Source IP: {src}
-Destination IP: {dst}
-Protocol: {proto}
-Destination Port: {dpt}
-Repeated Attempts: {count}
+    inputs = tokenizer(prompt, return_tensors="pt")
 
-Your explanation MUST include:
-1. The likely attacker behavior or technique.
-2. A possible motive for the repeated attempts.
-3. The potential security risk if ignored.
-4. How this behavior fits into the attack kill chain.
-5. Recommended defensive actions.
+    with torch.no_grad():
+        outputs = model.generate(
+            **inputs,
+            max_new_tokens=250,
+            do_sample=True,
+            temperature=0.7,
+            top_p=0.9,
+            repetition_penalty=1.2
+        )
+        
 
-Write in clear professional incident-report language.
-    """
+    result = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-    response = llm(prompt, max_length=200)[0]["generated_text"]
-    return response.strip()
+    return result.strip()

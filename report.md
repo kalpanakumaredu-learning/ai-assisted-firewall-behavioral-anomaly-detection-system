@@ -1,24 +1,58 @@
-# AI-Powered Firewall Threat Analysis Report
+# AI-Assisted Firewall Behavioral Anomaly Detection Report
 
-## Suspicious Activity
+## Incident 1
 
-You are a senior cybersecurity analyst.
-Analyze the following network event and provide a detailed security explanation (6-8 sentences):
+**Detection Type:** Time-Window Burst Activity  
+**Source IP:** 192.168.1.99  
+**Target:** 10.0.0.1  
+**Port(s):** 22  
 
-Source IP: 185.122.58.13
-Destination IP: 192.168.0.20
-Protocol: Unknown
-Destination Port: 22
-Repeated Attempts: 7
+**Severity:** MEDIUM  
+**Risk Score:** 5  
+**Confidence:** 0.8  
+**MITRE Technique:** T1110 - Brute Force  
 
-Your explanation MUST include:
-1. The likely attacker behavior or technique.
-2. A possible motive for the repeated attempts.
-3. The potential security risk if ignored.
-4. How this behavior fits into the attack kill chain.
-5. Recommended defensive actions.
+---
 
-Write in clear professional incident-report language.
+## Incident 2
+
+**Detection Type:** Time-Window Burst Activity  
+**Source IP:** 192.168.1.250  
+**Target:** 10.0.0.1  
+**Port(s):** 80  
+
+**Severity:** MEDIUM  
+**Risk Score:** 5  
+**Confidence:** 0.8  
+**MITRE Technique:** T1595 - Active Scanning  
+
+---
+
+## Incident 3
+
+**Detection Type:** Multi-Port Scanning  
+**Source IP:** 192.168.1.200  
+**Target:** Multiple  
+**Port(s):** Multiple  
+
+**Severity:** LOW  
+**Risk Score:** 3  
+**Confidence:** 0.64  
+**MITRE Technique:** T1595 - Active Scanning  
+
+---
+
+## Incident 4
+
+**Detection Type:** Statistical Activity Spike  
+**Source IP:** 192.168.1.250  
+**Target:** Multiple  
+**Port(s):** Multiple  
+
+**Severity:** HIGH  
+**Risk Score:** 7  
+**Confidence:** 0.9  
+**MITRE Technique:** T1498 - Network Denial of Service (Potential)  
 
 ---
 

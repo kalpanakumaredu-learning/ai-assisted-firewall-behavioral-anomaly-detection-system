@@ -1,22 +1,41 @@
 import re
 from typing import List, Dict
+from datetime import datetime
 
-# This file will parse firewall logs into structured Python objects.
-# We will update this together.
-
-# Parsing logic for UFW firewall logs implemented below.
 
 def parse_firewall_log_line(line: str) -> Dict:
     """
-    Parse UFW firewall log line and extract key fields.
-    Example UFW log:
-    Dec 14 17:28:14 host kernel: [UFW BLOCK] IN=enp0s3 OUT= MAC=... SRC=185.122.58.13 DST=192.168.0.20 LEN=60 TOS=0x00 PROTO=TCP SPT=53422 DPT=22
+    Parse UFW firewall log line and extract:
+    - timestamp
+    - SRC
+    - DST
+    - PROTO
+    - SPT
+    - DPT
     """
+
+    # Extract timestamp (e.g., "Mar 10 17:00:01")
+    timestamp_match = re.search(r"^(\w+\s+\d+\s+\d+:\d+:\d+)", line)
+    timestamp = None
+
+    if timestamp_match:
+        time_str = timestamp_match.group(1)
+        try:
+            timestamp = datetime.strptime(time_str, "%b %d %H:%M:%S")
+            timestamp = timestamp.replace(year=datetime.now().year)
+        except ValueError:
+            timestamp = None
+
+    # Extract firewall fields
     pattern = r"SRC=(?P<SRC>\S+) DST=(?P<DST>\S+).*?PROTO=(?P<PROTO>\S+) SPT=(?P<SPT>\S+) DPT=(?P<DPT>\S+)"
     match = re.search(pattern, line)
+
     if match:
-        return match.groupdict()
-    return {"raw": line.strip()}
+        event = match.groupdict()
+        event["timestamp"] = timestamp
+        return event
+
+    return {"raw": line.strip(), "timestamp": timestamp}
 
 
 def parse_log_file(filepath: str) -> List[Dict]:
@@ -28,6 +47,5 @@ def parse_log_file(filepath: str) -> List[Dict]:
 
 
 if __name__ == "__main__":
-    # Example usage (we'll adapt this later):
     logs = parse_log_file("../data/firewall_sample.log")
     print(logs[:5])
